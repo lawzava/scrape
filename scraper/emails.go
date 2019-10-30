@@ -48,7 +48,13 @@ func isValidEmail(email string) bool {
 	if len(split) < 2 {
 		return false
 	}
+
 	ending := split[len(split)-1]
+
+	if len(ending) < 2 {
+		return false
+	}
+
 	for _, sf := range suffixFilter {
 		if ending == sf {
 			return false
