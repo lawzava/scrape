@@ -1,3 +1,5 @@
+[![scrape](https://snapcraft.io/scrape/badge.svg)](https://snapcraft.io/scrape)
+
 # simple-email-scraper
 
 Sample call:
