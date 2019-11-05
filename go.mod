@@ -1,4 +1,4 @@
-module github.com/lawzava/simple-email-scraper
+module github.com/lawzava/srape
 
 go 1.13
 

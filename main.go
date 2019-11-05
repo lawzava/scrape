@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/lawzava/simple-email-scraper/scraper"
+	"github.com/lawzava/scrape/scraper"
 )
 
 func main() {

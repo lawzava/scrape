@@ -1,18 +1,20 @@
 name: scrape
-version: git
-summary: CLI for scraping emails.
+version: '1.1.0'
+summary: CLI utility for scraping emails.
 description: |
   CLI utility that scrapes emails from specified website
-confinement: devmode
+confinement: strict
 base: core18
 parts:
   scrape:
     plugin: go
-    go-importpath: github.com/lawzava/simple-email-scraper
+    go-importpath: github.com/lawzava/scrape
     source: .
     source-type: git
     build-packages:
       - gcc
 apps:
   scrape:
-    command: bin/simple-email-scraper
+    command: bin/scrape
+    plugs:
+      - network
