@@ -1,13 +1,23 @@
 [![scrape](https://snapcraft.io/scrape/badge.svg)](https://snapcraft.io/scrape)
 
-# simple-email-scraper
+# Scrape
+CLI utility to scrape emails from websites
 
+### Usage
 Sample call:
 
-`scraper -website https://lawzava.com -depth 2` 
+`scrape -website https://lawzava.com -depth 2` 
 
-### Available paramters:
-`-recursively true` - follows links within same domain space
-`-log true` - prints additional logs
-`-async true` - executes asynchronously 
-`-depth 4` - how deep to follow the links
+##### Parameters:
+```
+  -async
+        scan website concurrently (default true)
+  -depth int
+        maximum depth for recursive scan (default 1)
+  -log
+        print logs
+  -recursively
+        scan website recursively (default true)
+  -website string
+        specify a website to scrape (default "https://v0.vc")
+```
