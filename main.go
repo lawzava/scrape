@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"github.com/lawzava/scrape/scraper"
 )
@@ -28,7 +29,9 @@ func main() {
 
 	// Scrape for emails
 	var scrapedEmails []string
-	scrap.Scrape(&scrapedEmails)
+	if err := scrap.Scrape(&scrapedEmails); err != nil {
+		log.Fatal(err)
+	}
 
 	if *printLogs {
 		fmt.Printf("\n\n\n")
