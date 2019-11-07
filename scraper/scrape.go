@@ -50,5 +50,13 @@ func prepareAllowedDomain(domain string) []string {
 	domain = strings.TrimLeft(domain, "http://")
 	domain = strings.TrimLeft(domain, "https://")
 	domain = strings.TrimLeft(domain, "wwww.")
-	return []string{domain, "www." + domain, "*." + domain}
+	return []string{
+		domain,
+		"www." + domain,
+		"*." + domain,
+		"http://" + domain,
+		"https://" + domain,
+		"http://www." + domain,
+		"https://www." + domain,
+	}
 }

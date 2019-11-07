@@ -4,6 +4,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/lawzava/srape/tld"
 )
 
 // Parse any *@*.* string and append to the slice
@@ -34,14 +36,6 @@ func parseEmails(body []byte, scrapedEmails *[]string) {
 	}
 }
 
-// Ignore these endings
-var suffixFilter = []string{
-	"png",
-	"jpg",
-	"gif",
-	"svg",
-}
-
 // Check if email looks valid
 func isValidEmail(email string) bool {
 	split := strings.Split(email, ".")
@@ -55,10 +49,8 @@ func isValidEmail(email string) bool {
 		return false
 	}
 
-	for _, sf := range suffixFilter {
-		if ending == sf {
-			return false
-		}
+	if !tld.IsValid(ending) {
+		return false
 	}
 
 	if _, err := strconv.Atoi(ending); err == nil {
