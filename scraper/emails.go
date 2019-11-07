@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lawzava/srape/tld"
+	"github.com/lawzava/scrape/tld"
 )
 
 // Parse any *@*.* string and append to the slice
