@@ -30,3 +30,10 @@ func (s *Scraper) Log(v ...interface{}) {
 		log.Println(v)
 	}
 }
+
+func (s *Scraper) GetWebsite(secure bool) string {
+	if secure {
+		return "https://" + s.Website
+	}
+	return "http://" + s.Website
+}

@@ -21,6 +21,7 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 		}
 		c.AllowedDomains = allowedDomains
 	}
+	s.Website = trimProtocol(s.Website)
 
 	if s.Recursively {
 		// Find and visit all links
@@ -41,18 +42,29 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 	})
 
 	// Start the scrape
-	if err := c.Visit(s.Website); err != nil {
+	if err := c.Visit(s.GetWebsite(true)); err != nil {
 		s.Log("error while visiting: ", err.Error())
 	}
 
 	// Wait for concurrent scrapes to finish
 	c.Wait()
 
+	if scrapedEmails == nil {
+		// Start the scrape
+		if err := c.Visit(s.GetWebsite(false)); err != nil {
+			s.Log("error while visiting: ", err.Error())
+		}
+
+		// Wait for concurrent scrapes to finish
+		c.Wait()
+	}
+
 	return nil
 }
 
 // Trim the input domain to whitelist root
 func prepareAllowedDomain(requestURL string) ([]string, error) {
+	requestURL = "https://" + trimProtocol(requestURL)
 	u, err := url.ParseRequestURI(requestURL)
 	if err != nil {
 		return nil, err
@@ -67,4 +79,8 @@ func prepareAllowedDomain(requestURL string) ([]string, error) {
 		"http://www." + domain,
 		"https://www." + domain,
 	}, nil
+}
+
+func trimProtocol(requestURL string) string {
+	return strings.Trim(strings.Trim(requestURL, "http://"), "https://")
 }

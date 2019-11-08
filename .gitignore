@@ -1,8 +1,9 @@
 bin
 vendor
 .idea
-parts/
-prime/
+parts
+prime
+snap
+stage
 *.snap
-snap/
-stage/
+*.xdelta3

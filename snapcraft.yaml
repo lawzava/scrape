@@ -1,5 +1,5 @@
 name: scrape
-version: '1.2.3'
+version: '1.2.4'
 summary: CLI utility to scrape emails from websites
 description: |
   CLI utility that scrapes emails from specified website recursively and concurrently
