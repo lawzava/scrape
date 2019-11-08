@@ -17,6 +17,9 @@ compress:
 	cd ./bin && find . -name 'scrape*' | xargs -I{} tar czf {}.tar.gz {}
 
 snap-build:
+	rm scrape_*_amd64.snap
+	snapcraft clean scrape -s build
+	snapcraft clean
 	snapcraft
 
 snap-publish:
