@@ -6,18 +6,15 @@ CLI utility to scrape emails from websites
 ### Usage
 Sample call:
 
-`scrape -website https://lawzava.com -depth 2` 
+`scrape -w https://lawzava.com` 
 
-##### Parameters:
-```
-  -async
-        scan website concurrently (default true)
-  -depth int
-        maximum depth for recursive scan (default 1)
-  -log
-        print logs
-  -recursively
-        scan website recursively (default true)
-  -website string
-        specify a website to scrape (default "https://v0.vc")
+#### Parameters:
+          --async             Scrape website pages asynchronously (default true)
+      -d, --depth int         Max depth to follow when scraping recursively (default 3)
+          --emails            Scrape emails (default true)
+          --follow-external   Follow external 3rd party links within website
+      -h, --help              help for scrape
+          --logs              Print debug logs
+          --recursively       Scrape website recursively (default true)
+      -w, --website string    Website to scrape (default "https://lawzava.com")
 ```
