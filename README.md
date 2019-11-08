@@ -9,6 +9,7 @@ Sample call:
 `scrape -w https://lawzava.com` 
 
 #### Parameters:
+```
           --async             Scrape website pages asynchronously (default true)
       -d, --depth int         Max depth to follow when scraping recursively (default 3)
           --emails            Scrape emails (default true)
