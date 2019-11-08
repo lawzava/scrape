@@ -7,3 +7,4 @@ snap
 stage
 *.snap
 *.xdelta3
+*.bz2
