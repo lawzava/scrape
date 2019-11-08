@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"log"
 	"net/url"
 	"strings"
 
@@ -10,25 +9,27 @@ import (
 
 // Scrape is responsible for main scraping logic
 func (s *Scraper) Scrape(scrapedEmails *[]string) error {
-	allowedDomains, err := prepareAllowedDomain(s.Website)
-	if err != nil {
-		return err
+	// Configure colly
+	c := colly.NewCollector()
+
+	c.MaxDepth = s.MaxDepth
+	c.Async = s.Async
+	if !s.FollowExternalLinks {
+		allowedDomains, err := prepareAllowedDomain(s.Website)
+		if err != nil {
+			return err
+		}
+		c.AllowedDomains = allowedDomains
 	}
-	c := colly.NewCollector(
-		colly.MaxDepth(s.MaxDepth),              // Control the link following
-		colly.Async(s.Async),                    // Execute concurrently
-		colly.AllowedDomains(allowedDomains...), // Ignore 3rd party links
-	)
 
 	if s.Recursively {
 		// Find and visit all links
 		c.OnHTML("a", func(e *colly.HTMLElement) {
+			s.Log("visiting: ", e.Attr("href"))
 			if err := e.Request.Visit(e.Attr("href")); err != nil {
 				// Ignore already visited error, this appears too often
 				if err != colly.ErrAlreadyVisited {
-					if s.PrintLogs {
-						log.Println("error while linking: ", err.Error())
-					}
+					s.Log("error while linking: ", err.Error())
 				}
 			}
 		})
@@ -41,9 +42,7 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	// Start the scrape
 	if err := c.Visit(s.Website); err != nil {
-		if s.PrintLogs {
-			log.Printf("error while visiting: %s\n", err.Error())
-		}
+		s.Log("error while visiting: ", err.Error())
 	}
 
 	// Wait for concurrent scrapes to finish
@@ -63,7 +62,6 @@ func prepareAllowedDomain(requestURL string) ([]string, error) {
 	return []string{
 		domain,
 		"www." + domain,
-		"*." + domain,
 		"http://" + domain,
 		"https://" + domain,
 		"http://www." + domain,

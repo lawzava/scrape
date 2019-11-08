@@ -1,45 +1,23 @@
+/*
+Copyright © 2019 Law Zava <i@lawzava.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package main
 
-import (
-	"flag"
-	"fmt"
-	"log"
-
-	"github.com/lawzava/scrape/scraper"
-)
+import "github.com/lawzava/scrape/cmd"
 
 func main() {
-
-	// Parse flags
-	websiteToScrape := flag.String("website", "https://v0.vc", "specify a website to scrape")
-	recursively := flag.Bool("recursively", true, "scan website recursively")
-	async := flag.Bool("async", true, "scan website concurrently")
-	maxDepth := flag.Int("depth", 1, "maximum depth for recursive scan")
-	printLogs := flag.Bool("log", false, "print logs")
-	flag.Parse()
-
-	// Initiate scraper
-	scrap := scraper.New(*websiteToScrape, scraper.Parameters{
-		Emails:      true,
-		Recursively: *recursively,
-		Async:       *async,
-		MaxDepth:    *maxDepth,
-		PrintLogs:   *printLogs,
-	})
-
-	// Scrape for emails
-	var scrapedEmails []string
-	if err := scrap.Scrape(&scrapedEmails); err != nil {
-		log.Fatal(err)
-	}
-
-	if *printLogs {
-		fmt.Printf("\n\n\n")
-		fmt.Println("=================================")
-		fmt.Println("Scrape finished. Results:")
-		fmt.Println(" ")
-	}
-	for _, email := range scrapedEmails {
-		fmt.Println(email)
-	}
+	cmd.Execute()
 }

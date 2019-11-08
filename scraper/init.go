@@ -1,26 +1,32 @@
 package scraper
 
+import "log"
+
 // Goal of the scrape
 type Scraper struct {
-	Website string
 	Parameters
 }
 
 // Configuration for the scrape
 type Parameters struct {
-	Emails      bool
-	Recursively bool
-	Async       bool
-	MaxDepth    int
-	PrintLogs   bool
+	Website             string
+	Emails              bool
+	Recursively         bool
+	Async               bool
+	MaxDepth            int
+	PrintLogs           bool
+	FollowExternalLinks bool
 }
 
 // Initiate new scraper
-func New(website string, parameters Parameters) *Scraper {
+func New(parameters Parameters) *Scraper {
 	var s Scraper
-
-	s.Website = website
 	s.Parameters = parameters
-
 	return &s
+}
+
+func (s *Scraper) Log(v ...interface{}) {
+	if s.PrintLogs {
+		log.Println(v)
+	}
 }
