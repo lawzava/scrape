@@ -24,12 +24,15 @@ grade: stable
 icon: ./icon.svg
 parts:
   scrape:
-    plugin: go
-    go-importpath: github.com/lawzava/scrape
+    plugin: nil
+    build-snaps: [go]
     source: .
     source-type: git
-    build-packages:
-      - gcc
+    override-build: |
+      export GOBIN=$SNAPCRAFT_PART_INSTALL/bin
+      export GO111MODULE=on
+      export CGO_ENABLED=0
+      go build -o ../../../prime/bin/scrape
 apps:
   scrape:
     command: bin/scrape
