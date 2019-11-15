@@ -1,8 +1,12 @@
 package scraper
 
 import (
+	"context"
+	"log"
 	"net/url"
 	"strings"
+
+	"github.com/chromedp/chromedp"
 
 	"github.com/gocolly/colly"
 )
@@ -22,6 +26,25 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 		c.AllowedDomains = allowedDomains
 	}
 	s.Website = trimProtocol(s.Website)
+
+	if s.JSWait {
+		c.OnResponse(func(response *colly.Response) {
+			ctx, cancel := chromedp.NewContext(context.Background())
+			defer cancel()
+
+			var res string
+			err := chromedp.Run(ctx,
+				chromedp.Navigate(response.Request.URL.String()),
+				chromedp.InnerHTML("html", &res), // Scrape whole rendered page
+			)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+
+			response.Body = []byte(res)
+		})
+	}
 
 	if s.Recursively {
 		// Find and visit all links

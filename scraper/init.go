@@ -16,6 +16,7 @@ type Parameters struct {
 	MaxDepth            int
 	PrintLogs           bool
 	FollowExternalLinks bool
+	JSWait              bool
 }
 
 // Initiate new scraper

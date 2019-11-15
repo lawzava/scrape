@@ -62,4 +62,5 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.PrintLogs, "logs", false, "Print debug logs")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.FollowExternalLinks, "follow-external", false, "Follow external 3rd party links within website")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Emails, "emails", true, "Scrape emails")
+	rootCmd.PersistentFlags().BoolVar(&scraperParameters.JSWait, "js-wait", false, "Should wait for JS to execute")
 }
