@@ -15,6 +15,7 @@ Sample call:
           --emails            Scrape emails (default true)
           --follow-external   Follow external 3rd party links within website
       -h, --help              help for scrape
+          --js-wait           Should wait for JS to execute
           --logs              Print debug logs
           --recursively       Scrape website recursively (default true)
       -w, --website string    Website to scrape (default "https://lawzava.com")
