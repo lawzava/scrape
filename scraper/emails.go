@@ -8,9 +8,11 @@ import (
 	"github.com/lawzava/scrape/tld"
 )
 
+// Initialize once
+var reg = regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`)
+
 // Parse any *@*.* string and append to the slice
 func parseEmails(body []byte, scrapedEmails *[]string) {
-	reg := regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`)
 	res := reg.FindAll(body, -1)
 
 	for _, r := range res {
@@ -49,6 +51,7 @@ func isValidEmail(email string) bool {
 		return false
 	}
 
+	// check if TLD name actually exists and is not some image ending
 	if !tld.IsValid(ending) {
 		return false
 	}
