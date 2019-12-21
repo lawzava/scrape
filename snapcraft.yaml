@@ -24,7 +24,7 @@ icon: ./icon.svg
 parts:
   scrape:
     plugin: nil
-    stage-snaps: [chromium]
+    stage-packages: [google-chrome]
     build-snaps: [go]
     source: .
     source-type: git
