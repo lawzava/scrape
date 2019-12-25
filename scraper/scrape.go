@@ -2,7 +2,6 @@ package scraper
 
 import (
 	"context"
-	"log"
 	"net/url"
 	"strings"
 
@@ -18,13 +17,16 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	c.MaxDepth = s.MaxDepth
 	c.Async = s.Async
+
 	if !s.FollowExternalLinks {
 		allowedDomains, err := prepareAllowedDomain(s.Website)
 		if err != nil {
 			return err
 		}
+
 		c.AllowedDomains = allowedDomains
 	}
+
 	s.Website = trimProtocol(s.Website)
 
 	if s.JSWait {
@@ -33,12 +35,11 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 			defer cancel()
 
 			var res string
-			err := chromedp.Run(ctx,
+			if err := chromedp.Run(ctx,
 				chromedp.Navigate(response.Request.URL.String()),
 				chromedp.InnerHTML("html", &res), // Scrape whole rendered page
-			)
-			if err != nil {
-				log.Println(err)
+			); err != nil {
+				s.Log("error while executing chromedp: ", err)
 				return
 			}
 
@@ -88,12 +89,14 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 // Trim the input domain to whitelist root
 func prepareAllowedDomain(requestURL string) ([]string, error) {
 	requestURL = "https://" + trimProtocol(requestURL)
+
 	u, err := url.ParseRequestURI(requestURL)
 	if err != nil {
 		return nil, err
 	}
-	hostname := u.Hostname()
-	domain := strings.TrimLeft(hostname, "wwww.")
+
+	domain := strings.TrimPrefix(u.Hostname(), "wwww.")
+
 	return []string{
 		domain,
 		"www." + domain,
@@ -105,5 +108,5 @@ func prepareAllowedDomain(requestURL string) ([]string, error) {
 }
 
 func trimProtocol(requestURL string) string {
-	return strings.Trim(strings.Trim(requestURL, "http://"), "https://")
+	return strings.TrimPrefix(strings.TrimPrefix(requestURL, "http://"), "https://")
 }

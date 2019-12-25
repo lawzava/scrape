@@ -9,7 +9,7 @@ import (
 )
 
 // Initialize once
-var reg = regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`)
+var reg = regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`) // nolint
 
 // Parse any *@*.* string and append to the slice
 func parseEmails(body []byte, scrapedEmails *[]string) {

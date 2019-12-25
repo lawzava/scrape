@@ -10,10 +10,10 @@ type Scraper struct {
 // Configuration for the scrape
 type Parameters struct {
 	Website             string
+	MaxDepth            int
 	Emails              bool
 	Recursively         bool
 	Async               bool
-	MaxDepth            int
 	PrintLogs           bool
 	FollowExternalLinks bool
 	JSWait              bool
@@ -21,14 +21,14 @@ type Parameters struct {
 
 // Initiate new scraper
 func New(parameters Parameters) *Scraper {
-	var s Scraper
-	s.Parameters = parameters
-	return &s
+	return &Scraper{
+		Parameters: parameters,
+	}
 }
 
 func (s *Scraper) Log(v ...interface{}) {
 	if s.PrintLogs {
-		log.Println(v)
+		log.Println(v...)
 	}
 }
 
@@ -36,5 +36,6 @@ func (s *Scraper) GetWebsite(secure bool) string {
 	if secure {
 		return "https://" + s.Website
 	}
+
 	return "http://" + s.Website
 }
