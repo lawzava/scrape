@@ -6,5 +6,6 @@ func IsValid(request string) bool {
 			return true
 		}
 	}
+
 	return false
 }

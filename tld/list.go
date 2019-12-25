@@ -1,6 +1,6 @@
 package tld
 
-func availableTLDs() []string {
+func availableTLDs() []string { // nolint
 	return []string{
 		"aaa",
 		"aarp",
@@ -625,7 +625,7 @@ func availableTLDs() []string {
 		"imamat",
 		"imdb",
 		"immo",
-		"immobilien",
+		"immobilien", // nolint
 		"in",
 		"industries",
 		"infiniti",
@@ -962,7 +962,7 @@ func availableTLDs() []string {
 		"partners",
 		"parts",
 		"party",
-		"passagens",
+		"passagens", // nolint
 		"pay",
 		"pccw",
 		"pe",
