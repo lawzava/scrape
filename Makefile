@@ -18,9 +18,8 @@ compress:
 
 snap-build:
 	rm -f scrape_*_amd64.snap
-#	snapcraft clean scrape -s build
 	snapcraft clean
 	snapcraft
 
 snap-publish:
-	snapcraft push --release=stable scrape_*_amd64.snap
+	snapcraft push --release=edge scrape_*_amd64.snap
