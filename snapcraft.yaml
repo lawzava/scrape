@@ -16,7 +16,7 @@ description: |
               --logs              Print debug logs
               --recursively       Scrape website recursively (default true)
           -w, --website string    Website to scrape (default "https://lawzava.com")
-confinement: classic
+confinement: strict
 base: core18
 type: app
 grade: stable
@@ -32,9 +32,10 @@ parts:
       export GO111MODULE=on
       export CGO_ENABLED=0
       go build -o ../../../prime/bin/scrape
+    stage-snaps:
+      - chromium
 apps:
   scrape:
     command: bin/scrape
     plugs:
       - network
-      - browser-support

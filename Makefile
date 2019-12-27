@@ -16,9 +16,11 @@ build-darwin:
 compress:
 	cd ./bin && find . -name 'scrape*' | xargs -I{} tar czf {}.tar.gz {}
 
-snap-build:
+snap-clean:
 	rm -f scrape_*_amd64.snap
 	snapcraft clean
+
+snap-build:
 	snapcraft
 
 snap-publish:

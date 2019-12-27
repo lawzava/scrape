@@ -5,6 +5,5 @@ parts
 prime
 snap
 stage
-*.snap
-*.xdelta3
+*.snap*
 *.bz2
