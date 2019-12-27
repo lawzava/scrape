@@ -16,7 +16,7 @@ description: |
               --logs              Print debug logs
               --recursively       Scrape website recursively (default true)
           -w, --website string    Website to scrape (default "https://lawzava.com")
-confinement: strict
+confinement: classic
 base: core18
 type: app
 grade: stable
