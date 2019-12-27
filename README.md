@@ -8,7 +8,7 @@ Sample call:
 
 `scrape -w https://lawzava.com` 
 
-Depends on `chromium` or `google-chrome` being available in path if `--js-wait` is used
+Depends on `chromium` or `google-chrome` being available in path if `--js` is used
 
 #### Parameters:
 ```

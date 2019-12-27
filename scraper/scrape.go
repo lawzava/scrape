@@ -31,7 +31,7 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	if s.JSWait {
 		c.OnResponse(func(response *colly.Response) {
-			if err := initiateChromeSession(response); err != nil {
+			if err := initiateScrapingFromChrome(response); err != nil {
 				s.Log(err)
 				return
 			}
@@ -100,8 +100,19 @@ func trimProtocol(requestURL string) string {
 	return strings.TrimPrefix(strings.TrimPrefix(requestURL, "http://"), "https://")
 }
 
-func initiateChromeSession(response *colly.Response) error {
-	ctx, cancel := chromedp.NewContext(context.Background())
+func initiateScrapingFromChrome(response *colly.Response) error {
+	opts := []chromedp.ExecAllocatorOption{
+		chromedp.UserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3830.0 Safari/537.36"), // nolint
+		chromedp.WindowSize(1920, 1080),
+		chromedp.NoFirstRun,
+		chromedp.Headless,
+		chromedp.DisableGPU,
+	}
+
+	ctx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancel()
+
+	ctx, cancel = chromedp.NewContext(ctx)
 	defer cancel()
 
 	var res string
