@@ -6,6 +6,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/gocolly/colly/debug"
+
 	"github.com/chromedp/chromedp"
 
 	"github.com/gocolly/colly"
@@ -16,8 +18,8 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 	// Initiate colly
 	c := colly.NewCollector()
 
-	c.MaxDepth = s.MaxDepth
 	c.Async = s.Async
+	c.MaxDepth = s.MaxDepth
 	s.Website = trimProtocol(s.Website)
 
 	if !s.FollowExternalLinks {
@@ -29,7 +31,11 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 		c.AllowedDomains = allowedDomains
 	}
 
-	if s.JSWait {
+	if s.Debug {
+		c.SetDebugger(&debug.LogDebugger{})
+	}
+
+	if s.JS {
 		c.OnResponse(func(response *colly.Response) {
 			if err := initiateScrapingFromChrome(response); err != nil {
 				s.Log(err)

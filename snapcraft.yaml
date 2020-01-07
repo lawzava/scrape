@@ -1,21 +1,10 @@
 name: scrape
-version: '1.3.2'
+version: '1.4.0'
 summary: CLI utility to scrape emails from websites
 description: |
   CLI utility that scrapes emails from specified website recursively and concurrently
 
-  Sample call: `scrape -website https://lawzava.com -depth 2`
-
-  **Parameters**
-              --async             Scrape website pages asynchronously (default true)
-          -d, --depth int         Max depth to follow when scraping recursively (default 3)
-              --emails            Scrape emails (default true)
-              --follow-external   Follow external 3rd party links within website
-          -h, --help              help for scrape
-              --js                Enables JS execution await (not supported throuh snap yet)
-              --logs              Print debug logs
-              --recursively       Scrape website recursively (default true)
-          -w, --website string    Website to scrape (default "https://lawzava.com")
+  Sample call: `scrape -w v0.vc`
 confinement: strict
 base: core18
 type: app

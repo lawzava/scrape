@@ -47,12 +47,12 @@ func init() { // nolint
 		"depth", "d", 3, "Max depth to follow when scraping recursively")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Async,
 		"async", true, "Scrape website pages asynchronously")
-	rootCmd.PersistentFlags().BoolVar(&scraperParameters.PrintLogs,
-		"logs", false, "Print debug logs")
+	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Debug,
+		"debug", false, "Print debug logs")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.FollowExternalLinks,
 		"follow-external", false, "Follow external 3rd party links within website")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Emails,
 		"emails", true, "Scrape emails")
-	rootCmd.PersistentFlags().BoolVar(&scraperParameters.JSWait,
+	rootCmd.PersistentFlags().BoolVar(&scraperParameters.JS,
 		"js", false, "Enables JS execution await")
 }

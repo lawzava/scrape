@@ -11,12 +11,14 @@ type Scraper struct {
 type Parameters struct {
 	Website             string
 	MaxDepth            int
-	Emails              bool
 	Recursively         bool
 	Async               bool
-	PrintLogs           bool
+	JS                  bool
 	FollowExternalLinks bool
-	JSWait              bool
+	Debug               bool
+
+	// Objects to scrape
+	Emails bool
 }
 
 // Initiate new scraper
@@ -27,7 +29,7 @@ func New(parameters Parameters) *Scraper {
 }
 
 func (s *Scraper) Log(v ...interface{}) {
-	if s.PrintLogs {
+	if s.Debug {
 		log.Println(v...)
 	}
 }

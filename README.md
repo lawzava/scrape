@@ -18,7 +18,7 @@ Depends on `chromium` or `google-chrome` being available in path if `--js` is us
           --follow-external   Follow external 3rd party links within website
       -h, --help              help for scrape
           --js                Enables JS execution await
-          --logs              Print debug logs
+          --debug              Print debug logs
           --recursively       Scrape website recursively (default true)
       -w, --website string    Website to scrape (default "https://lawzava.com")
 ```
