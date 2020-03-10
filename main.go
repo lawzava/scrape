@@ -16,7 +16,7 @@ limitations under the License.
 
 package main
 
-import "github.com/lawzava/scrape/cmd"
+import "lawzava/scrape/cmd"
 
 func main() {
 	cmd.Execute()

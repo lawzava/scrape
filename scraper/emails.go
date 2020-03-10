@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lawzava/scrape/tld"
+	"lawzava/scrape/tld"
 )
 
 // Initialize once
-var reg = regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`) // nolint
+var reg = regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`)
 
 // Parse any *@*.* string and append to the slice
 func parseEmails(body []byte, scrapedEmails *[]string) {

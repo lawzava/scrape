@@ -1,6 +1,6 @@
 package tld
 
-func availableTLDs() []string { // nolint
+func availableTLDs() []string {
 	return []string{
 		"aaa",
 		"aarp",

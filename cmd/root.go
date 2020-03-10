@@ -5,14 +5,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/lawzava/scrape/scraper"
+	"lawzava/scrape/scraper"
 
 	"github.com/spf13/cobra"
 )
 
-var scraperParameters scraper.Parameters // nolint
+var scraperParameters scraper.Parameters
 
-var rootCmd = &cobra.Command{ // nolint
+var rootCmd = &cobra.Command{
 	Use:   "scrape",
 	Short: "CLI utility to scrape emails from websites",
 	Long:  `CLI utility that scrapes emails from specified website recursively and concurrently`,
@@ -38,7 +38,7 @@ func Execute() {
 	}
 }
 
-func init() { // nolint
+func init() {
 	rootCmd.PersistentFlags().StringVarP(&scraperParameters.Website,
 		"website", "w", "https://lawzava.com", "Website to scrape")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Recursively,
