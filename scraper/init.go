@@ -16,6 +16,7 @@ type Parameters struct {
 	JS                  bool
 	FollowExternalLinks bool
 	Debug               bool
+	Timeout             int
 
 	// Objects to scrape
 	Emails bool
