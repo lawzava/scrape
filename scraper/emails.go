@@ -1,11 +1,10 @@
 package scraper
 
 import (
+	"lawzava/scrape/tld"
 	"regexp"
 	"strconv"
 	"strings"
-
-	"lawzava/scrape/tld"
 )
 
 // Initialize once

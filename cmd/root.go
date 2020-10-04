@@ -2,10 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"lawzava/scrape/scraper"
 	"log"
 	"os"
-
-	"lawzava/scrape/scraper"
 
 	"github.com/spf13/cobra"
 )
