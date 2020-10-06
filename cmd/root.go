@@ -54,4 +54,6 @@ func init() {
 		"emails", true, "Scrape emails")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.JS,
 		"js", false, "Enables JS execution await")
+	rootCmd.PersistentFlags().IntVar(&scraperParameters.Timeout,
+		"timeout", 0, "If > 0, specify a timeout (seconds) for js execution await")
 }
