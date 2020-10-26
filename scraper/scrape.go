@@ -67,7 +67,7 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	c.Wait() // Wait for concurrent scrapes to finish
 
-	if scrapedEmails == nil {
+	if scrapedEmails == nil || len(*scrapedEmails) == 0 {
 		// Start the scrape on insecure url
 		if err := c.Visit(s.GetWebsite(false)); err != nil {
 			s.Log("error while visiting: ", err.Error())
