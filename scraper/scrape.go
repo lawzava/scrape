@@ -3,12 +3,13 @@ package scraper
 import (
 	"context"
 	"fmt"
-	"github.com/chromedp/chromedp"
-	"github.com/gocolly/colly"
-	"github.com/gocolly/colly/debug"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/chromedp/chromedp"
+	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/debug"
 )
 
 // Scrape is responsible for main scraping logic
