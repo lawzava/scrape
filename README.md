@@ -1,6 +1,15 @@
-[![scrape](https://snapcraft.io/scrape/badge.svg)](https://snapcraft.io/scrape)
 
-# Scrape
+# scrape.sh
+
+Wrapper for https://github.com/lawzava/scrape to scrape a TSV (tab seperated file) of 
+urls to product a TSV output with emails
+
+### scrape.sh usage
+
+
+
+## Forked from https://github.com/lawzava/scrape
+
 CLI utility to scrape emails from websites
 
 ### Usage
