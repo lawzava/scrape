@@ -1,52 +1,85 @@
 package scraper
 
 import (
+	"bytes"
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/lawzava/go-tld"
 )
 
-// Initialize once
+type emails struct {
+	emails []string
+	m      sync.Mutex
+}
+
+func (s *emails) add(email string) {
+	if !isValidEmail(email) {
+		return
+	}
+
+	// check for already existing emails
+	for _, existingEmail := range s.emails {
+		if existingEmail == email {
+			return
+		}
+	}
+
+	s.m.Lock()
+	s.emails = append(s.emails, email)
+	s.m.Unlock()
+}
+
+// Initialize once.
 var reg = regexp.MustCompile(`([a-zA-Z0-9._-]+@([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+)`)
 
-// Parse any *@*.* string and append to the slice
-func parseEmails(body []byte, scrapedEmails *[]string) {
+// Parse any *@*.* string and append to the slice.
+func (s *emails) parseEmails(body []byte) {
 	res := reg.FindAll(body, -1)
 
 	for _, r := range res {
-		email := string(r)
-		if !isValidEmail(email) {
-			continue
-		}
-
-		var skip bool
-		// Check for already existing emails
-		for _, existingEmail := range *scrapedEmails {
-			if existingEmail == email {
-				skip = true
-				break
-			}
-		}
-
-		if skip {
-			continue
-		}
-
-		*scrapedEmails = append(*scrapedEmails, email)
+		s.add(string(r))
 	}
 }
 
-// Check if email looks valid
+func (s *emails) parseCloudflareEmail(cloudflareEncodedEmail string) {
+	decodedEmail := decodeCloudflareEmail(cloudflareEncodedEmail)
+	email := reg.FindString(decodedEmail)
+
+	s.add(email)
+}
+
+func decodeCloudflareEmail(email string) string {
+	var e bytes.Buffer
+
+	r, _ := strconv.ParseInt(email[0:2], 16, 0)
+
+	for n := 4; n < len(email)+2; n += 2 {
+		i, _ := strconv.ParseInt(email[n-2:n], 16, 0)
+		e.WriteString(string(i ^ r))
+	}
+
+	return e.String()
+}
+
+// Check if email looks valid.
 func isValidEmail(email string) bool {
+	if email == "" {
+		return false
+	}
+
 	split := strings.Split(email, ".")
+
+	// nolint:gomnd // allow magic number here
 	if len(split) < 2 {
 		return false
 	}
 
 	ending := split[len(split)-1]
 
+	// nolint:gomnd // allow magic number here
 	if len(ending) < 2 {
 		return false
 	}

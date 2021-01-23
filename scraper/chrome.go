@@ -11,7 +11,9 @@ import (
 
 func initiateScrapingFromChrome(response *colly.Response, timeout int) error {
 	opts := []chromedp.ExecAllocatorOption{
-		chromedp.UserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3830.0 Safari/537.36"), // nolint
+		// nolint:lll // allow longer line here
+		chromedp.UserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3830.0 Safari/537.36"),
+		// nolint:gomnd // allow magic number here
 		chromedp.WindowSize(1920, 1080),
 		chromedp.NoFirstRun,
 		chromedp.Headless,
@@ -35,6 +37,7 @@ func initiateScrapingFromChrome(response *colly.Response, timeout int) error {
 	); err != nil {
 		return fmt.Errorf("executing chromedp: %w", err)
 	}
+
 	response.Body = []byte(res)
 
 	return nil

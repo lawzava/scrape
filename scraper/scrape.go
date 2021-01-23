@@ -1,23 +1,26 @@
 package scraper
 
 import (
+	"errors"
+
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/debug"
 )
 
-// Scrape is responsible for main scraping logic
-func (s *Scraper) Scrape(scrapedEmails *[]string) error {
+// Scrape is responsible for main scraping logic.
+func (s *Scraper) Scrape() ([]string, error) {
 	// Initiate colly
 	c := colly.NewCollector()
 
 	c.Async = s.Async
 	c.MaxDepth = s.MaxDepth
 	s.Website = trimProtocol(s.Website)
+	e := emails{}
 
 	if !s.FollowExternalLinks {
 		allowedDomains, err := prepareAllowedDomain(s.Website)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		c.AllowedDomains = allowedDomains
@@ -31,6 +34,7 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 		c.OnResponse(func(response *colly.Response) {
 			if err := initiateScrapingFromChrome(response, s.Timeout); err != nil {
 				s.Log(err)
+
 				return
 			}
 		})
@@ -38,11 +42,11 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	if s.Recursively {
 		// Find and visit all links
-		c.OnHTML("a", func(e *colly.HTMLElement) {
-			s.Log("visiting: ", e.Attr("href"))
-			if err := e.Request.Visit(e.Attr("href")); err != nil {
+		c.OnHTML("a[href]", func(el *colly.HTMLElement) {
+			s.Log("visiting: ", el.Attr("href"))
+			if err := el.Request.Visit(el.Attr("href")); err != nil {
 				// Ignore already visited error, this appears too often
-				if err != colly.ErrAlreadyVisited {
+				if !errors.Is(err, colly.ErrAlreadyVisited) {
 					s.Log("error while linking: ", err.Error())
 				}
 			}
@@ -51,7 +55,12 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	// Parse emails on each downloaded page
 	c.OnScraped(func(response *colly.Response) {
-		parseEmails(response.Body, scrapedEmails)
+		e.parseEmails(response.Body)
+	})
+
+	// cloudflare encoded email support
+	c.OnHTML("span[data-cfemail]", func(el *colly.HTMLElement) {
+		e.parseCloudflareEmail(el.Attr("data-cfemail"))
 	})
 
 	// Start the scrape
@@ -61,7 +70,7 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 	c.Wait() // Wait for concurrent scrapes to finish
 
-	if scrapedEmails == nil || len(*scrapedEmails) == 0 {
+	if e.emails == nil || len(e.emails) == 0 {
 		// Start the scrape on insecure url
 		if err := c.Visit(s.GetWebsite(false)); err != nil {
 			s.Log("error while visiting: ", err.Error())
@@ -70,5 +79,5 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 		c.Wait() // Wait for concurrent scrapes to finish
 	}
 
-	return nil
+	return e.emails, nil
 }
