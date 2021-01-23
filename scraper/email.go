@@ -1,10 +1,11 @@
 package scraper
 
 import (
-	"lawzava/scrape/tld"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/lawzava/go-tld"
 )
 
 // Initialize once

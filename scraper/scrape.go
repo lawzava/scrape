@@ -1,13 +1,6 @@
 package scraper
 
 import (
-	"context"
-	"fmt"
-	"net/url"
-	"strings"
-	"time"
-
-	"github.com/chromedp/chromedp"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/debug"
 )
@@ -76,62 +69,6 @@ func (s *Scraper) Scrape(scrapedEmails *[]string) error {
 
 		c.Wait() // Wait for concurrent scrapes to finish
 	}
-
-	return nil
-}
-
-// Trim the input domain to whitelist root
-func prepareAllowedDomain(requestURL string) ([]string, error) {
-	requestURL = "https://" + trimProtocol(requestURL)
-
-	u, err := url.ParseRequestURI(requestURL)
-	if err != nil {
-		return nil, err
-	}
-
-	domain := strings.TrimPrefix(u.Hostname(), "wwww.")
-
-	return []string{
-		domain,
-		"www." + domain,
-		"http://" + domain,
-		"https://" + domain,
-		"http://www." + domain,
-		"https://www." + domain,
-	}, nil
-}
-
-func trimProtocol(requestURL string) string {
-	return strings.TrimPrefix(strings.TrimPrefix(requestURL, "http://"), "https://")
-}
-
-func initiateScrapingFromChrome(response *colly.Response, timeout int) error {
-	opts := []chromedp.ExecAllocatorOption{
-		chromedp.UserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3830.0 Safari/537.36"), // nolint
-		chromedp.WindowSize(1920, 1080),
-		chromedp.NoFirstRun,
-		chromedp.Headless,
-		chromedp.DisableGPU,
-	}
-
-	ctx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
-	defer cancel()
-
-	ctx, cancel = chromedp.NewContext(ctx)
-	defer cancel()
-
-	if timeout > 0 {
-		ctx, cancel = context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-		defer cancel()
-	}
-
-	var res string
-	if err := chromedp.Run(ctx, chromedp.Navigate(response.Request.URL.String()),
-		chromedp.InnerHTML("html", &res), // Scrape whole rendered page
-	); err != nil {
-		return fmt.Errorf("executing chromedp: %w", err)
-	}
-	response.Body = []byte(res)
 
 	return nil
 }

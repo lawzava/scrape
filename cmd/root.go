@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"lawzava/scrape/scraper"
 	"log"
 	"os"
+
+	"github.com/lawzava/scrape/scraper"
 
 	"github.com/spf13/cobra"
 )
@@ -16,11 +17,11 @@ var rootCmd = &cobra.Command{
 	Short: "CLI utility to scrape emails from websites",
 	Long:  `CLI utility that scrapes emails from specified website recursively and concurrently`,
 	Run: func(cmd *cobra.Command, args []string) {
-		scrap := scraper.New(scraperParameters)
+		scraper := scraper.New(scraperParameters)
 
 		// Scrape for emails
 		var scrapedEmails []string
-		if err := scrap.Scrape(&scrapedEmails); err != nil {
+		if err := scraper.Scrape(&scrapedEmails); err != nil {
 			log.Fatal(err)
 		}
 
@@ -32,7 +33,7 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		os.Exit(1)
 	}
 }

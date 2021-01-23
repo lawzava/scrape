@@ -1,4 +1,4 @@
-module lawzava/scrape
+module github.com/lawzava/scrape
 
 go 1.15
 
@@ -13,6 +13,7 @@ require (
 	github.com/gocolly/colly v1.2.0
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/lawzava/go-tld v1.0.0
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/spf13/cobra v1.1.1
 	github.com/temoto/robotstxt v1.1.1 // indirect
