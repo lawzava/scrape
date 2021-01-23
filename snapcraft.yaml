@@ -4,7 +4,7 @@ summary: CLI utility to scrape emails from websites
 description: |
   CLI utility that scrapes emails from specified website recursively and concurrently
 
-  Sample call: `scrape -w v0.vc`
+  Sample call: `scrape -w lawzava.com`
 confinement: strict
 base: core18
 type: app
