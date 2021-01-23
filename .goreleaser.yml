@@ -1,0 +1,36 @@
+project_name: scrape
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - go mod download
+builds:
+ -
+  env:
+    - CGO_ENABLED=0
+  main: ./main.go
+  goos:
+    - linux
+    - darwin
+    - windows
+  goarch:
+    - 386
+    - amd64
+    - arm
+    - arm64
+  ignore:
+    - goos: darwin
+      goarch: 386
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      386: i386
+      amd64: x86_64
