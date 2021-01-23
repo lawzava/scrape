@@ -3,6 +3,15 @@
 # Scrape
 CLI utility to scrape emails from websites
 
+### Features
+
+- Asynchronous scraping
+- Recursive link follow
+- External link follow
+- Cloudflare email obfuscation decoding
+- Client side rendered pages support through headless `chromium` load awaits
+- Simple, grepable output
+
 ### Usage
 Sample call:
 
