@@ -58,7 +58,9 @@ func decodeCloudflareEmail(email string) string {
 
 	for n := 4; n < len(email)+2; n += 2 {
 		i, _ := strconv.ParseInt(email[n-2:n], 16, 0)
-		e.WriteString(string(i ^ r))
+		c := i ^ r
+
+		e.WriteRune(rune(c))
 	}
 
 	return e.String()
