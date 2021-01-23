@@ -2,41 +2,45 @@ package cmd
 
 import (
 	"fmt"
-	"lawzava/scrape/scraper"
 	"log"
 	"os"
+
+	"github.com/lawzava/scrape/scraper"
 
 	"github.com/spf13/cobra"
 )
 
+// nolint:gochecknoglobals // allow global var here
 var scraperParameters scraper.Parameters
 
+// nolint:exhaustivestruct,gochecknoglobals // not valid requirement for this use case
 var rootCmd = &cobra.Command{
 	Use:   "scrape",
 	Short: "CLI utility to scrape emails from websites",
 	Long:  `CLI utility that scrapes emails from specified website recursively and concurrently`,
 	Run: func(cmd *cobra.Command, args []string) {
-		scrap := scraper.New(scraperParameters)
+		scraper := scraper.New(scraperParameters)
 
 		// Scrape for emails
-		var scrapedEmails []string
-		if err := scrap.Scrape(&scrapedEmails); err != nil {
+		scrapedEmails, err := scraper.Scrape()
+		if err != nil {
 			log.Fatal(err)
 		}
 
 		for _, email := range scrapedEmails {
-			fmt.Println(email)
+			fmt.Println(email) // nolint:forbidigo // allow println here for non intrusive response
 		}
 	},
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		os.Exit(1)
 	}
 }
 
+// nolint:gochecknoinits // required by github.com/spf13/cobra
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&scraperParameters.Website,
 		"website", "w", "https://lawzava.com", "Website to scrape")

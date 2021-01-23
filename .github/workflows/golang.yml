@@ -1,0 +1,29 @@
+name: Golang
+on: [push]
+env:
+  GO111MODULE: on
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go for use with actions
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Run tests
+        run: go test -race -covermode atomic -coverprofile=covprofile ./...
+      - name: Install goveralls
+        env:
+          GO111MODULE: off
+        run: go get github.com/mattn/goveralls
+      - name: Send coverage
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        run: goveralls -coverprofile=covprofile

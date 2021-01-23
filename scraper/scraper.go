@@ -2,27 +2,29 @@ package scraper
 
 import "log"
 
-// Goal of the scrape
+// Goal of the scrape.
 type Scraper struct {
 	Parameters
 }
 
-// Configuration for the scrape
+// Configuration for the scrape.
 type Parameters struct {
-	Website             string
-	MaxDepth            int
+	Website string
+
+	MaxDepth int
+	Timeout  int
+
 	Recursively         bool
 	Async               bool
 	JS                  bool
 	FollowExternalLinks bool
 	Debug               bool
-	Timeout             int
 
 	// Objects to scrape
 	Emails bool
 }
 
-// Initiate new scraper
+// Initiate new scraper.
 func New(parameters Parameters) *Scraper {
 	return &Scraper{
 		Parameters: parameters,
