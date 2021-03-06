@@ -89,6 +89,7 @@ linters:
     - makezero
     - predeclared
     - thelper
+    - ifshort
 
 issues:
   exclude-rules:

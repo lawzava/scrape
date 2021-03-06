@@ -23,7 +23,6 @@ Depends on `chromium` or `google-chrome` being available in path if `--js` is us
 ```
           --async             Scrape website pages asynchronously (default true)
       -d, --depth int         Max depth to follow when scraping recursively (default 3)
-          --emails            Scrape emails (default true)
           --follow-external   Follow external 3rd party links within website
       -h, --help              help for scrape
           --js                Enables JS execution await
