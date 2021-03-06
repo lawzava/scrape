@@ -30,3 +30,8 @@ Depends on `chromium` or `google-chrome` being available in path if `--js` is us
           --recursively       Scrape website recursively (default true)
       -w, --website string    Website to scrape (default "https://lawzava.com")
 ```
+
+### Note about scraper package
+
+For those that are looking for `scraper` package - this repository was intended as a cli-use only thus the scraper package was moved to [lawzava/emailscraper](https://github.com/lawzava/emailscraper).
+The `scrape` utility will be maintained as a CLI implementation of `emailscraper` package.
