@@ -24,9 +24,9 @@ n_opt=100000000;
 
 #columnm of URL
 #url_col=10;
-url_col=6;
+url_col=3;
 #column for key
-key_col=7;
+key_col=2;
 
 
 # Help documentation
