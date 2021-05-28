@@ -21,6 +21,7 @@ func main() {
 var (
 	scraperParameters emailscraper.Config
 	url               string
+	csv               bool
 )
 
 // nolint:exhaustivestruct,gochecknoglobals // not valid requirement for this use case
@@ -38,7 +39,11 @@ var rootCmd = &cobra.Command{
 		}
 
 		for _, email := range scrapedEmails {
-			fmt.Println(email) // nolint:forbidigo // allow println here for non intrusive response
+			if csv {
+				fmt.Println(url + "," + email) // nolint:forbidigo // allow println here for non intrusive response
+			} else {
+				fmt.Println(email) // nolint:forbidigo // allow println here for non intrusive response
+			}
 		}
 	},
 }
@@ -61,4 +66,6 @@ func init() {
 		"js", false, "Enables EnableJavascript execution await")
 	rootCmd.PersistentFlags().IntVar(&scraperParameters.Timeout,
 		"timeout", 0, "If > 0, specify a timeout (seconds) for js execution await")
+	rootCmd.PersistentFlags().BoolVarP(&csv,
+		"output-csv", "c", false, "Output csv: <url>,<email>")
 }
