@@ -7,3 +7,4 @@ snap
 stage
 *.snap*
 *.bz2
+.vscode
