@@ -45,10 +45,7 @@ var rootCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		err = handleOutput(url, scrapedEmails)
-		if err != nil {
-			log.Fatal(err)
-		}
+		handleOutput(scrapedEmails)
 	},
 }
 
@@ -59,7 +56,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Recursively,
 		"recursively", true, "Scrape website recursively")
 	rootCmd.PersistentFlags().IntVarP(&scraperParameters.MaxDepth,
-		"depth", "d", 3, "Max depth to follow when scraping recursively")
+		"depth", "d", 3, "Max depth to follow when scraping recursively") // nolint:gomnd // allow default max depth
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Async,
 		"async", true, "Scrape website pages asynchronously")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Debug,
@@ -77,7 +74,7 @@ func init() {
 }
 
 // nolint:forbidigo // allow println here for non intrusive response
-func handleOutput(url string, emails []string) error {
+func handleOutput(emails []string) {
 	switch output {
 	case outputCSV:
 		for _, email := range emails {
@@ -88,41 +85,7 @@ func handleOutput(url string, emails []string) error {
 			fmt.Println(email)
 		}
 	case outputJSON:
-		if outputWithURL {
-			type outputFormat struct {
-				URL   string `json:"url"`
-				Email string `json:"email"`
-			}
-
-			out := make([]outputFormat, len(emails))
-			for i, email := range emails {
-				out[i].URL = url
-				out[i].Email = email
-			}
-
-			b, err := json.Marshal(out)
-			if err != nil {
-				return fmt.Errorf("failed to marshal json with url response: %w", err)
-			}
-
-			fmt.Println(string(b))
-		} else {
-			type outputFormat struct {
-				Email string `json:"email"`
-			}
-
-			out := make([]outputFormat, len(emails))
-			for i, email := range emails {
-				out[i].Email = email
-			}
-
-			b, err := json.Marshal(out)
-			if err != nil {
-				return fmt.Errorf("failed to marshal json response: %w", err)
-			}
-
-			fmt.Println(string(b))
-		}
+		fmt.Println(prepareJSONOutput(emails))
 	default:
 		for _, email := range emails {
 			if outputWithURL {
@@ -132,6 +95,42 @@ func handleOutput(url string, emails []string) error {
 			fmt.Println(email)
 		}
 	}
+}
 
-	return nil
+func prepareJSONOutput(emails []string) string {
+	if outputWithURL {
+		type outputFormat struct {
+			URL   string `json:"url"`
+			Email string `json:"email"`
+		}
+
+		out := make([]outputFormat, len(emails))
+		for i, email := range emails {
+			out[i].URL = url
+			out[i].Email = email
+		}
+
+		b, err := json.Marshal(out)
+		if err != nil {
+			log.Fatal(fmt.Errorf("failed to marshal json with url response: %w", err))
+		}
+
+		return string(b)
+	}
+
+	type outputFormat struct {
+		Email string `json:"email"`
+	}
+
+	out := make([]outputFormat, len(emails))
+	for i, email := range emails {
+		out[i].Email = email
+	}
+
+	b, err := json.Marshal(out)
+	if err != nil {
+		log.Fatal(fmt.Errorf("failed to marshal json response: %w", err))
+	}
+
+	return string(b)
 }
