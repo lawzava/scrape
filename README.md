@@ -21,14 +21,17 @@ Depends on `chromium` or `google-chrome` being available in path if `--js` is us
 
 #### Parameters:
 ```
-          --async             Scrape website pages asynchronously (default true)
-      -d, --depth int         Max depth to follow when scraping recursively (default 3)
-          --follow-external   Follow external 3rd party links within website
-      -h, --help              help for scrape
-          --js                Enables JS execution await
-          --debug             Print debug logs
-          --recursively       Scrape website recursively (default true)
-      -w, --website string    Website to scrape (default "https://lawzava.com")
+      --async             Scrape website pages asynchronously (default true)
+      --debug             Print debug logs
+  -d, --depth int         Max depth to follow when scraping recursively (default 3)
+      --follow-external   Follow external 3rd party links within website
+  -h, --help              help for scrape
+      --js                Enables EnableJavascript execution await
+      --output string     Output type to use (default 'plain', supported: 'csv', 'json') (default "plain")
+      --output-with-url   Adds URL to output with each email
+      --recursively       Scrape website recursively (default true)
+      --timeout int       If > 0, specify a timeout (seconds) for js execution await
+  -w, --website string    Website to scrape (default "https://lawzava.com")
 ```
 
 ### Note about scraper package

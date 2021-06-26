@@ -8,14 +8,10 @@ linters-settings:
       - style
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
-  golint:
-    min-confidence: 0
   govet:
     check-shadowing: true
   funlen:
     lines: 100
-  maligned:
-    suggest-new: true
   misspell:
     locale: US
   nakedret:
@@ -42,7 +38,6 @@ linters:
     - godot
     - gofmt
     - goimports
-    - golint
     - gomnd
     - gomodguard
     - goprintffuncname
@@ -50,15 +45,12 @@ linters:
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
-    - maligned
     - misspell
     - nakedret
     - nestif
     - prealloc
     - rowserrcheck
-    - scopelint
     - staticcheck
     - structcheck
     - stylecheck
@@ -90,6 +82,22 @@ linters:
     - predeclared
     - thelper
     - ifshort
+    - cyclop
+    - durationcheck
+    - forcetypeassert
+    - gci
+    - gomoddirectives
+    - importas
+    - nilerr
+    - promlinter
+    - revive
+    - tagliatelle
+    - testpackage
+    - wastedassign
+    # - interfacer # Deprecated
+    # - golint # Deprecated
+    # - maligned # Deprecated
+    # - scopelint # Deprecated
 
 issues:
   exclude-rules:
