@@ -1,7 +1,6 @@
 build: ensure-dir build-linux build-windows build-darwin compress
 
-ensure-dir:
-	rm -rf bin
+ensure-dir: clean
 	mkdir bin
 
 build-linux:
@@ -15,6 +14,9 @@ build-darwin:
 
 compress:
 	cd ./bin && find . -name 'scrape*' | xargs -I{} tar czf {}.tar.gz {}
+
+clean:
+	rm -rf bin
 
 snap-clean:
 	rm -f scrape_*_amd64.snap*
