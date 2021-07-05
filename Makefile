@@ -1,15 +1,18 @@
-build: ensure-dir build-linux build-windows build-darwin compress
+default: clean bindir
+	go build -o bin/scrape *.go
 
-ensure-dir: clean
+amd64: clean bindir linux windows darwin compress
+
+bindir:
 	mkdir bin
 
-build-linux:
+linux:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o bin/scrape.linux-amd64 *.go
 
-build-windows:
+windows:
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o bin/scrape.windows-amd64.exe *.go
 
-build-darwin:
+darwin:
 	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o bin/scrape.darwin-amd-64 *.go
 
 compress:
