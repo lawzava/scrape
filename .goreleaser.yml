@@ -34,3 +34,13 @@ archives:
     replacements:
       386: i386
       amd64: x86_64
+brews:
+  - homepage: 'https://github.com/lawzava/scrape'
+    description: 'CLI utility to scrape emails from websites'
+    folder: Formula
+    commit_author:
+      name: Law Zava
+      email: law@zava.dev
+    tap:
+      owner: lawzava
+      name: scrape
