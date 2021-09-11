@@ -3,7 +3,7 @@
 # Scrape
 CLI utility to scrape emails from websites
 
-### Features
+## Features
 
 - Asynchronous scraping
 - Recursive link follow
@@ -12,14 +12,30 @@ CLI utility to scrape emails from websites
 - Client side rendered pages support through headless `chromium` load awaits
 - Simple, grepable output
 
-### Usage
+## Install
+
+* MacOS:
+
+    ```bash
+    brew tap lawzava/scrape https://github.com/lawzava/scrape
+    brew install scrape
+    ```
+
+* Linux:
+
+    ```bash
+    sudo snap install scrape
+    ```
+
+
+## Usage
 Sample call:
 
 `scrape -w https://lawzava.com` 
 
 Depends on `chromium` or `google-chrome` being available in path if `--js` is used
 
-#### Parameters:
+### Parameters:
 ```
       --async             Scrape website pages asynchronously (default true)
       --debug             Print debug logs
@@ -34,7 +50,7 @@ Depends on `chromium` or `google-chrome` being available in path if `--js` is us
   -w, --website string    Website to scrape (default "https://lawzava.com")
 ```
 
-### Note about scraper package
+## Note about scraper package
 
 For those that are looking for `scraper` package - this repository was intended as a cli-use only thus the scraper package was moved to [lawzava/emailscraper](https://github.com/lawzava/emailscraper).
 The `scrape` utility will be maintained as a CLI implementation of `emailscraper` package.
