@@ -6,7 +6,6 @@ class Scrape < Formula
   desc "CLI utility to scrape emails from websites"
   homepage "https://github.com/lawzava/scrape"
   version "1.7.1"
-  bottle :unneeded
 
   on_macos do
     if Hardware::CPU.intel?
