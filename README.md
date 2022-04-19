@@ -8,6 +8,7 @@ urls to product a TSV output with emails
 
 ./scrape.sh{php} -f 2 file.tsv 
 options
+
 -f email column number (defaults = 1)
 -v will output to stderr debug information
 
