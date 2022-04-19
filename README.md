@@ -6,8 +6,9 @@ urls to product a TSV output with emails
 
 ### Ideal scrape.sh usage
 
-./scrape.sh{php} file.tsv 
+./scrape.sh{php} -f 2 file.tsv 
 options
+-f email column number (defaults = 1)
 -v will output to stderr debug information
 
 ouptput to stdout:
