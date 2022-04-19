@@ -10,6 +10,7 @@ urls to product a TSV output with emails
 options
 
 -f email column number (defaults = 1)
+
 -v will output to stderr debug information
 
 ouptput to stdout:
