@@ -6,9 +6,11 @@ urls to product a TSV output with emails
 
 ### Ideal scrape.sh usage
 
-./scrape.sh{php} file.tsv
+./scrape.sh{php} file.tsv 
+options
+-v will output to stderr debug information
 
-ouptput:
+ouptput to stdout:
 ```
 email     domain    website
 ```
