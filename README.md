@@ -4,7 +4,14 @@
 Wrapper for https://github.com/lawzava/scrape to scrape a TSV (tab seperated file) of 
 urls to product a TSV output with emails
 
-### scrape.sh usage
+### Ideal scrape.sh usage
+
+./scrape.sh{php} file.tsv
+
+ouptput:
+```
+email     domain    website
+```
 
 
 
