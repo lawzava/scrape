@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 $command = "./bin/scrape.darwin-amd-64 -w";
 
