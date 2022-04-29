@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+// Don't forget to make this file executable or the above won't work
+
 $command = "./bin/scrape.darwin-amd-64 -w";
 
 
