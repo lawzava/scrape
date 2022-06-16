@@ -16,7 +16,40 @@
   //   2) Add optional post processing step to filter domains from input file
   //   3) Add post processing step to de-dup email address by full domain
 
-  $command = "./bin/scrape.darwin-amd-64 -w";
+  // Flow
+  // Read command line
+  // If scraping from command line...
+  // Open scrape URL filter file (if there is one) and build filter array
+  // Open scrape file
+  // Loop over scrape URLs, skipping ones filtered
+  // Open output file and stuff output data into file
+  // Quit if just scraping
+  //
+  // If processing from command line
+  // Open email domain filter file (if there is one) and build filter array
+  // Loop over
+
+  include "ScrapeCommand.php";
+
+  $x = 7;
+  if ($x == 7) {
+    print("Thats all folks!\n");
+    exit();
+  }
+
+  $command = new ScrapeCommand($argc, $argv);
+  $command->initialize();
+  $command->process();
+
+  die;
+
+
+
+
+
+
+  $scrapeCommand = "./bin/scrape.darwin-amd-64 -w";
+
 
   // Validate the input
   //   Usage is "run_scrape <filename>"
@@ -54,13 +87,21 @@
       print("{$url}\tINVALID URL\n");
     } else {
       // Execute the scraper with this URL
-      exec("{$command} {$url}", $output, $result);
+      exec("{$scrapeCommand} {$url}", $output, $result);
 
       // No problem! print the output
       foreach($output as $email) {
         print("{$url}\t$email\n");
       }
     }
+
+  }
+
+  function parseCommandLine() {
+
+  }
+
+  function showHelp() {
 
   }
 
