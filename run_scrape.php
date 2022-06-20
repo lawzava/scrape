@@ -3,6 +3,41 @@
 <?php
   // TODO: Make this file executable or the above won't work
 
+/**
+ * INSTRUCTIONS:
+ *
+ * --urls <default to run_scrape_urls.csv>
+ * --emails <default to run_scrape_emails.csv
+ * --output <default to run_scrape_output.csv
+ * --url-filters <default to run_scrape_url_filters.csv
+ * --email-domain-filters <default to run_scrape_email_domain_filters.csv
+ * --url-column <defaults to column 1>
+ *
+ * --help
+ * --verbose
+ * --scrape-only
+ * --email-filter-only
+ * --no-url-filter
+ * --no-email-filter
+ * --no-dup-filter
+ *
+ *
+ * Given a CSV file of urls extract each url and run the scrape command to get emails
+ * Output the emails to a file
+ *
+ * Optionally apply a list of url domains to NOT run the scrape
+ * Optionally apply list of email domains to filter out of output csv
+ * Optionally choose which column to grab the urls in the csv file
+ *
+ *
+ *
+ */
+
+  // INSTRUCTIONS:
+  // --in_urls
+
+
+  //
   // TODO:
   //   1) Add command line args
   //     1. help
@@ -18,33 +53,23 @@
 
   // Flow
   // Read command line
-  // If scraping from command line...
-  // Open scrape URL filter file (if there is one) and build filter array
-  // Open scrape file
+  // If not scraping, skip to
+  // Open scrape URL filter file
   // Loop over scrape URLs, skipping ones filtered
   // Open output file and stuff output data into file
   // Quit if just scraping
   //
   // If processing from command line
-  // Open email domain filter file (if there is one) and build filter array
-  // Loop over
+  // Open email domain filter file and build filter array
+  // Loop over emails and filter out domains
 
   include "ScrapeCommand.php";
-
-  $x = 7;
-  if ($x == 7) {
-    print("Thats all folks!\n");
-    exit();
-  }
 
   $command = new ScrapeCommand($argc, $argv);
   $command->initialize();
   $command->process();
 
   die;
-
-
-
 
 
 
