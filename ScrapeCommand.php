@@ -180,7 +180,7 @@ class ScrapeCommand {
         // Update the stats
         $this->statsUrlsProcessed++;
       } else {
-        $this->logLine(" Skipping invalid URL: $url");
+        $this->logLine("  Skipping invalid URL: $url");
         $this->statsUrlsInvalid++;
       }
     }
