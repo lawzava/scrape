@@ -5,7 +5,11 @@
  * These backlinks are then processed by this tool (they are the urls file list) in order to
  * extract all the emails on those links. These emails can be useful for marketing purposes (or other purposes
  *
- * Steps in the process
+ * Reference:
+ *   https://github.com/lawzava/scrape
+ *   Scrape a TSV (tab seperated file) of urls to product a TSV output with emails
+ *
+ * Steps in the process:
  *   1) Given the backlinks file of URLs
  *   2) Filter out url domains that are irrelevant using URL filters file
  *   3) Scrape urls to extract extract emails
@@ -39,7 +43,7 @@ class ScrapeCommand {
   protected $argv;
 
   const SCRAPE_COMMAND = "./bin/scrape.darwin-amd-64 -w";
-  const URLS_FILENAME_DEFAULT = 'run_scrape_urls.csv';
+  const URLS_FILENAME_DEFAULT = 'run_scrape_urls.tsv';
   const EMAILS_FILENAME_DEFAULT = 'run_scrape_emails.csv';
   const URL_FILTERS_FILENAME_DEFAULT = 'url_filters.txt';
   const EMAIL_FILTERS_FILENAME_DEFAULT = 'email_filters.txt';
@@ -91,8 +95,15 @@ class ScrapeCommand {
     $this->logLine('Timezone = ' . date_default_timezone_get());
     $this->logLine('Processing starting');
 
-    // $this->executeScrape();
-    sleep(5);
+    if (!$this->isEmailOnly) {
+      $this->executeScrape();
+    }
+
+    if (!$this->isScrapeOnly) {
+      $this->processEmails();
+    }
+
+    $this->cleanup();
 
     $this->logLine('Processing ending');
     $end = time();
@@ -106,15 +117,57 @@ class ScrapeCommand {
    */
 
   /**
-   * Helper to start the scrape
+   * Loop over all the urls and run scrape for each
    *
    * @return void
    */
   protected function executeScrape() {
     $scrapeCommand = self::SCRAPE_COMMAND;
 
-    // Execute the scraper with this URL
-    exec("{$scrapeCommand} {$url}", $this->outputFile, $resultCode);
+    // The first line is the column names, ignore it
+    if (feof($this->urlsFile)) {
+      $this->logErrorLine("Empty urls file!");
+      $this->cleanupAndDie();
+    }
+    $line = fgets($this->urlsFile);
+    if (feof($this->urlsFile)) {
+      $this->logErrorLine("Invalid urls file format, only 1 line (assumed to be column headers)!");
+      $this->cleanupAndDie();
+    }
+
+    // Process until the end of the file
+    while (!feof($this->urlsFile)) {
+      // Reset the emailList output every time through the loop
+      $emailList = [];
+
+      $line = fgets($this->urlsFile);
+      $columns = explode("\t", $line);
+
+      $url = $columns[$this->urlColumn];
+
+      // Validate that is is in fact a valid url
+      $validatedUrl = filter_var($url, FILTER_VALIDATE_URL);
+
+      // Execute the scraper with this URL
+      exec("{$scrapeCommand} {$validatedUrl}", $emailList, $resultCode);
+
+      $countUrls = count($emailList);
+      $this->logLine("\tProcessed {$validatedUrl}, found {$countUrls} emails");
+
+      // Pump the output data into the emails csv file
+      foreach ($emailList as $email) {
+        fputcsv($this->emailsFile, [$validatedUrl, $email]);
+      }
+    }
+  }
+
+  /**
+   * Loops over all the emails doing a de-dup and filter
+   *
+   * @return void
+   */
+  protected function processEmails() {
+
   }
 
   /**
@@ -242,9 +295,9 @@ class ScrapeCommand {
     printLine("  --no-email-filter            - do not apply the email domains filter");
     printLine("  --no-dup-filter              - do not de-dup the emails in th the output file");
     printLine();
-    printLine("  --urls <filepath>            - urls to process, defaults to {$this->urlsFileName}");
-    printLine("  --emails <filepath>          - raw email list to process, defaults to {$this->emailsFileName}");
-    printLine("  --output <filepath>          - output emails, defaults to {$this->outputFileName}");
+    printLine("  --urls <filepath>            - urls to process in tsv format, defaults to {$this->urlsFileName}");
+    printLine("  --emails <filepath>          - raw email list to process in csv format, defaults to {$this->emailsFileName}");
+    printLine("  --output <filepath>          - output emails is csv format, defaults to {$this->outputFileName}");
     printLine("  --url-filters <filepath>     - url domains to filter out, defaults to {$this->urlFiltersFileName}");
     printLine("  --email-filters <filepath>   - email domains to filter out, defaults to {$this->emailFiltersFileName}");
     printLine("  --url-column <integer>       - defaults to column 1");
@@ -295,12 +348,23 @@ class ScrapeCommand {
     return $file;
   }
 
+
   /**
-   * Cleanup any necessary items (such as open files) and then die
+   * Cleanup and die
    *
    * @return void
    */
   protected function cleanupAndDie() {
+    $this->cleanup();
+    die();
+  }
+
+  /**
+   * Cleanup any necessary items (such as open files)
+   *
+   * @return void
+   */
+  protected function cleanup() {
     if ($this->outputFile) {
       fclose($this->outputFile);
     }
@@ -320,8 +384,6 @@ class ScrapeCommand {
     if ($this->urlsFile) {
       fclose($this->urlsFile);
     }
-
-    die();
   }
 
   /***
