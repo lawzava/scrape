@@ -68,11 +68,12 @@ class ScrapeCommand {
   public $isNoUrlFilter = false;
   public $isNoEmailFilter = false;
 
-  public $statsTotalUrls = 0;
   public $statsUrlsProcessed = 0;
+  public $statsUrlsInvalid = 0;
   public $statsUrlsFiltered = 0;
-  public $statsTotalEmails = 0;
-  public $statsUniqueEmails = 0;
+  public $statsEmailsTotal = 0;
+  public $statsEmailsUnique = 0;
+  public $statsEmailsInvalid = 0;
   public $statsEmailsFiltered = 0;
 
   public function __construct($argc, $argv) {
@@ -88,7 +89,7 @@ class ScrapeCommand {
   public function initialize() {
     date_default_timezone_set('America/Los_Angeles');
     $this->parseCommandLine();
-    $this->validateParams();
+    $this->validateParamsAndSetup();
   }
 
   /**
@@ -115,7 +116,15 @@ class ScrapeCommand {
     $this->logLine('Processing complete', true);
     $end = time();
     $total = ($end - $start) < 120 ? ($end - $start) . ' seconds' : intval(($end - $start) / 600) * 10 . ' minutes';
-    $this->logLine("Execution time: {$total}");
+    $this->logLine("  Execution time: {$total}");
+
+    if (!$this->isEmailOnly) {
+      $this->logLine("Scrape complete, {$this->statsUrlsProcessed} urls processed", true);
+    }
+
+    if (!$this->isScrapeOnly) {
+      $this->logLine("Email stats: {$this->statsEmailsTotal} total emails, {$this->statsEmailsUnique} unique emails", true);
+    }
   }
 
 
@@ -155,27 +164,32 @@ class ScrapeCommand {
       // Validate that is is in fact a valid url
       $validatedUrl = filter_var($url, FILTER_VALIDATE_URL);
 
-      // Execute the scraper with this URL
-      $scrapeCommand = self::SCRAPE_COMMAND;
-      exec("{$scrapeCommand} {$validatedUrl}", $emailList, $resultCode);
+      if ($validatedUrl) {
+        // Execute the scraper with this URL
+        $scrapeCommand = self::SCRAPE_COMMAND;
+        exec("{$scrapeCommand} {$validatedUrl}", $emailList, $resultCode);
 
-      $countUrls = count($emailList);
-      $this->logLine("  Processed {$validatedUrl}, found {$countUrls} emails");
+        $countUrls = count($emailList);
+        $this->logLine("  Processed {$validatedUrl}, found {$countUrls} emails");
 
-      // Pump the output data into the emails csv file
-      foreach ($emailList as $email) {
-        fputcsv($this->emailsFile, [$validatedUrl, $email]);
+        // Pump the output data into the emails csv file
+        foreach ($emailList as $email) {
+          fputcsv($this->emailsFile, [$validatedUrl, $email]);
+        }
+
+        // Update the stats
+        $this->statsUrlsProcessed++;
+      } else {
+        $this->logLine(" Skipping invalid URL: $url");
+        $this->statsUrlsInvalid++;
       }
-
-      // Update the stats
-      $this->statsUrlsProcessed++;
     }
 
     // Writing to the file is done, flush to disk and set the filepointer back to the beginning
     fflush($this->emailsFile);
     rewind($this->emailsFile);
 
-    $this->logLine("Scrape complete, {$this->statsUrlsProcessed} urls processed", true);
+    $this->logLine('Scrape complete', true);
   }
 
   /**
@@ -184,7 +198,7 @@ class ScrapeCommand {
    * @return void
    */
   protected function processEmails() {
-    $this->logLine("Starting email processing...");
+    $this->logLine('Starting email processing...');
 
     $uniqueEmails = [];
 
@@ -193,7 +207,7 @@ class ScrapeCommand {
     // That will create a unique list of domains & urls
     while (!feof($this->emailsFile)) {
       $line = fgets($this->emailsFile);
-      $columns = $columns = explode(',', $line);
+      $columns = explode(',', $line);
 
       if (count($columns) != 2) {
         // there is a problem, skip this line
@@ -203,10 +217,15 @@ class ScrapeCommand {
       $url = $columns[0];
       $email = $columns[1];
       $urlComponents = parse_url($url);
-      $host = $urlComponents['host'];
-      $uniqueEmails[$host][$email] = '1';
+      
+      if ($urlComponents === false) {
+        $this->statsEmailsInvalid++;
+      } else {
+        $host = $urlComponents['host'];
+        $uniqueEmails[$host][$email] = '1';
 
-      $this->statsTotalEmails++;
+        $this->statsEmailsTotal++;
+      }
     }
 
     // Loop over all the unique items and add them to the output file
@@ -214,14 +233,14 @@ class ScrapeCommand {
     foreach ($uniqueEmails AS $uniqueHost => $emails) {
       foreach ($emails AS $uniqueEmail => $dummy) {
         fputcsv($this->outputFile, [$uniqueHost, $uniqueEmail]);
-        $this->statsUniqueEmails++;
+        $this->statsEmailsUnique++;
       }
     }
 
     // Flush the file to disk
     fflush($this->outputFile);
 
-    $this->logLine("Email processing complete, {$this->statsTotalEmails} total emails, {$this->statsUniqueEmails} unique emails", true);
+    $this->logLine('Email processing complete', true);
   }
 
   /**
@@ -229,7 +248,7 @@ class ScrapeCommand {
    *
    * @return void
    */
-  protected function validateParams() {
+  protected function validateParamsAndSetup() {
     // Check for mutually exclusive conditions
     if ($this->isScrapeOnly && $this->isEmailOnly) {
       $this->logErrorLine('Cannot set scrapeOnly and emailOnly options at the same time');
