@@ -68,6 +68,13 @@ class ScrapeCommand {
   public $isNoUrlFilter = false;
   public $isNoEmailFilter = false;
 
+  public $statsTotalUrls = 0;
+  public $statsUrlsProcessed = 0;
+  public $statsUrlsFiltered = 0;
+  public $statsTotalEmails = 0;
+  public $statsUniqueEmails = 0;
+  public $statsEmailsFiltered = 0;
+
   public function __construct($argc, $argv) {
     $this->argc = $argc;
     $this->argv = $argv;
@@ -93,7 +100,7 @@ class ScrapeCommand {
     $start = time();
 
     $this->logLine('Timezone = ' . date_default_timezone_get());
-    $this->logLine('Processing starting');
+    $this->logLine('Processing starting', true);
 
     if (!$this->isEmailOnly) {
       $this->executeScrape();
@@ -105,7 +112,7 @@ class ScrapeCommand {
 
     $this->cleanup();
 
-    $this->logLine('Processing ending');
+    $this->logLine('Processing complete', true);
     $end = time();
     $total = ($end - $start) < 120 ? ($end - $start) . ' seconds' : intval(($end - $start) / 600) * 10 . ' minutes';
     $this->logLine("Execution time: {$total}");
@@ -122,7 +129,7 @@ class ScrapeCommand {
    * @return void
    */
   protected function executeScrape() {
-    $scrapeCommand = self::SCRAPE_COMMAND;
+    $this->logLine("Starting scrape...");
 
     // The first line is the column names, ignore it
     if (feof($this->urlsFile)) {
@@ -149,16 +156,26 @@ class ScrapeCommand {
       $validatedUrl = filter_var($url, FILTER_VALIDATE_URL);
 
       // Execute the scraper with this URL
+      $scrapeCommand = self::SCRAPE_COMMAND;
       exec("{$scrapeCommand} {$validatedUrl}", $emailList, $resultCode);
 
       $countUrls = count($emailList);
-      $this->logLine("\tProcessed {$validatedUrl}, found {$countUrls} emails");
+      $this->logLine("  Processed {$validatedUrl}, found {$countUrls} emails");
 
       // Pump the output data into the emails csv file
       foreach ($emailList as $email) {
         fputcsv($this->emailsFile, [$validatedUrl, $email]);
       }
+
+      // Update the stats
+      $this->statsUrlsProcessed++;
     }
+
+    // Writing to the file is done, flush to disk and set the filepointer back to the beginning
+    fflush($this->emailsFile);
+    rewind($this->emailsFile);
+
+    $this->logLine("Scrape complete, {$this->statsUrlsProcessed} urls processed", true);
   }
 
   /**
@@ -167,7 +184,44 @@ class ScrapeCommand {
    * @return void
    */
   protected function processEmails() {
+    $this->logLine("Starting email processing...");
 
+    $uniqueEmails = [];
+
+    // Loop over all the records (url & email)
+    // Parse the URl into just the domain and use that an the email as array indexes
+    // That will create a unique list of domains & urls
+    while (!feof($this->emailsFile)) {
+      $line = fgets($this->emailsFile);
+      $columns = $columns = explode(',', $line);
+
+      if (count($columns) != 2) {
+        // there is a problem, skip this line
+        continue;
+      }
+
+      $url = $columns[0];
+      $email = $columns[1];
+      $urlComponents = parse_url($url);
+      $host = $urlComponents['host'];
+      $uniqueEmails[$host][$email] = '1';
+
+      $this->statsTotalEmails++;
+    }
+
+    // Loop over all the unique items and add them to the output file
+    fputcsv($this->outputFile, ['Host', 'Email']);
+    foreach ($uniqueEmails AS $uniqueHost => $emails) {
+      foreach ($emails AS $uniqueEmail => $dummy) {
+        fputcsv($this->outputFile, [$uniqueHost, $uniqueEmail]);
+        $this->statsUniqueEmails++;
+      }
+    }
+
+    // Flush the file to disk
+    fflush($this->outputFile);
+
+    $this->logLine("Email processing complete, {$this->statsTotalEmails} total emails, {$this->statsUniqueEmails} unique emails", true);
   }
 
   /**
@@ -339,7 +393,7 @@ class ScrapeCommand {
       $this->cleanupAndDie();
     }
 
-    $file = fopen($filepath, 'x');
+    $file = fopen($filepath, 'x+');
     if (!$file) {
       $this->logErrorLine("Could not create file: {$filepath}");
       $this->cleanupAndDie();
@@ -390,10 +444,11 @@ class ScrapeCommand {
    * Helper to log info if verbose is set
    *
    * @param string $text
+   * @param bool $alwaysLog
    * @return void
    */
-  protected function logLine($text) {
-    if ($this->isVerbose) {
+  protected function logLine($text, $alwaysLog = true) {
+    if ($alwaysLog || $this->isVerbose) {
      printLine(date('h:i:s') . ': ' . $text);
     }
   }
