@@ -119,11 +119,11 @@ class ScrapeCommand {
     $this->logLine("  Execution time: {$total}");
 
     if (!$this->isEmailOnly) {
-      $this->logLine("Scrape complete, {$this->statsUrlsProcessed} urls processed", true);
+      $this->logLine('Scrape complete, ' . number_format($this->statsUrlsProcessed) . ' urls processed', true);
     }
 
     if (!$this->isScrapeOnly) {
-      $this->logLine("Email stats: {$this->statsEmailsTotal} total emails, {$this->statsEmailsUnique} unique emails", true);
+      $this->logLine('Email stats: ' . number_format($this->statsEmailsTotal) . ' total emails, ' . number_format($this->statsEmailsUnique) . ' unique emails', true);
     }
   }
 
@@ -169,6 +169,13 @@ class ScrapeCommand {
         $scrapeCommand = self::SCRAPE_COMMAND;
         exec("{$scrapeCommand} {$validatedUrl}", $emailList, $resultCode);
 
+        if ($resultCode == 127) {
+          $this->logLine("  Exec command failed with resultcode 127, the scrape command is not in your path");
+          $this->cleanupAndDie();
+        } else if ($resultCode != 0) {
+          $this->logLine("  Exec command failed with resultcode: {$resultCode}, skipping URL {$validatedUrl}", true);
+          continue;
+        }
         $countUrls = count($emailList);
         $this->logLine("  Processed {$validatedUrl}, found {$countUrls} emails");
 
@@ -218,7 +225,7 @@ class ScrapeCommand {
       $email = $columns[1];
       $urlComponents = parse_url($url);
       
-      if ($urlComponents === false) {
+      if ($urlComponents === false || !array_key_exists('host', $urlComponents)) {
         $this->statsEmailsInvalid++;
       } else {
         $host = $urlComponents['host'];
