@@ -5,35 +5,51 @@
 class Scrape < Formula
   desc "CLI utility to scrape emails from websites"
   homepage "https://github.com/lawzava/scrape"
-  version "1.7.1"
+  version "1.8.0"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/lawzava/scrape/releases/download/v1.7.1/scrape_darwin_x86_64.tar.gz"
-      sha256 "58b261c0c2a6e91fc9d567997e8fcf662e46e78099851e7b46e04077b74201a7"
+      url "https://github.com/lawzava/scrape/releases/download/v1.8.0/scrape_darwin_x86_64.tar.gz"
+      sha256 "2c3036e4476bb670a4d4da147543fe9d4c1937f3b34e1198f91bb14a64a8d3c5"
+
+      def install
+        bin.install "scrape"
+      end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/lawzava/scrape/releases/download/v1.7.1/scrape_darwin_arm64.tar.gz"
-      sha256 "2038e1ff870e8daf9f46b6b9afc8316e4862f1f750281930f47d528ec5b68493"
+      url "https://github.com/lawzava/scrape/releases/download/v1.8.0/scrape_darwin_arm64.tar.gz"
+      sha256 "87a25c738d4fd19aa168d7923279ff293e32630da320882561ad7f4d9a86a78b"
+
+      def install
+        bin.install "scrape"
+      end
     end
   end
 
   on_linux do
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/lawzava/scrape/releases/download/v1.8.0/scrape_linux_arm64.tar.gz"
+      sha256 "085485b1beb268aad4a4cabb6f59525c1ec70b6561b6c13b828934e768020297"
+
+      def install
+        bin.install "scrape"
+      end
+    end
     if Hardware::CPU.intel?
-      url "https://github.com/lawzava/scrape/releases/download/v1.7.1/scrape_linux_x86_64.tar.gz"
-      sha256 "bdb30e34af4c3f96034649917cc7d0645161884613c612ff8ac24cbf8c976f2d"
+      url "https://github.com/lawzava/scrape/releases/download/v1.8.0/scrape_linux_x86_64.tar.gz"
+      sha256 "c50032a8a659a2d016e195b7c1401252fbcb3e8dd27702bee13398c5d9056b22"
+
+      def install
+        bin.install "scrape"
+      end
     end
     if Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-      url "https://github.com/lawzava/scrape/releases/download/v1.7.1/scrape_linux_armv6.tar.gz"
-      sha256 "e0cea9714835730037ef7a494a6f73715afa5454938ff88c86905388990cbfc2"
-    end
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/lawzava/scrape/releases/download/v1.7.1/scrape_linux_arm64.tar.gz"
-      sha256 "e2d130e74c35efd23e481a7c6425dbfdc0ef97d28ffd194d7734f273c1cf416d"
-    end
-  end
+      url "https://github.com/lawzava/scrape/releases/download/v1.8.0/scrape_linux_armv6.tar.gz"
+      sha256 "601ca95986a27cddba56b6f83c317f9633efa4d43b9c02db0c119564b170d929"
 
-  def install
-    bin.install "scrape"
+      def install
+        bin.install "scrape"
+      end
+    end
   end
 end
