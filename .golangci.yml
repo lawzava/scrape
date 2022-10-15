@@ -7,7 +7,7 @@ linters-settings:
       - performance
       - style
   goimports:
-    local-prefixes: github.com/golangci/golangci-lint
+    local-prefixes: github.com/lawzava/scrape
   govet:
     check-shadowing: true
   funlen:
@@ -20,84 +20,7 @@ linters-settings:
     extra-rules: true
 
 linters:
-  disable-all: true
-  enable:
-    - bodyclose
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
-    - errcheck
-    - funlen
-    - gochecknoglobals
-    - gochecknoinits
-    - gocognit
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - gofmt
-    - goimports
-    - gomnd
-    - gomodguard
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - lll
-    - misspell
-    - nakedret
-    - nestif
-    - prealloc
-    - rowserrcheck
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unparam
-    - unused
-    - varcheck
-    - whitespace
-    - wsl
-    - asciicheck
-    - godox
-    - nolintlint
-    - goerr113
-    - exhaustive
-    - exportloopref
-    - gofumpt
-    - goheader
-    - noctx
-    - sqlclosecheck
-    - nlreturn
-    - errorlint
-    - exhaustivestruct
-    - paralleltest
-    - tparallel
-    - wrapcheck
-    - forbidigo
-    - makezero
-    - predeclared
-    - thelper
-    - ifshort
-    - cyclop
-    - durationcheck
-    - forcetypeassert
-    - gci
-    - gomoddirectives
-    - importas
-    - nilerr
-    - promlinter
-    - revive
-    - tagliatelle
-    - testpackage
-    - wastedassign
-    # - interfacer # Deprecated
-    # - golint # Deprecated
-    # - maligned # Deprecated
-    # - scopelint # Deprecated
+  enable-all: true
 
 issues:
   exclude-rules:
