@@ -39,7 +39,7 @@ brews:
     folder: Formula
     commit_author:
       name: Law Zava
-      email: law@zava.dev
+      email: git@lawzava.com 
     tap:
       owner: lawzava
       name: scrape
