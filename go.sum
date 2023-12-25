@@ -80,6 +80,8 @@ github.com/kennygrant/sanitize v1.2.4 h1:gN25/otpP5vAsO2djbMhF/LQX6R7+O1TB4yv8Nz
 github.com/kennygrant/sanitize v1.2.4/go.mod h1:LGsjYYtgxbetdg5owWB2mpgUL6e2nfw2eObZ0u0qvak=
 github.com/lawzava/emailscraper v1.3.0 h1:aI5JA6g+0S3jJW2et1oIAQ+l6GVOIUUJGnAu0Ynz6Cc=
 github.com/lawzava/emailscraper v1.3.0/go.mod h1:FCuK3oxZQxUjU0jRYkG4r62TnO6MT5ZsiVoOTmpvBqI=
+github.com/lawzava/emailscraper v1.3.1 h1:GaJZZXIyuuhwKqsQGD5Ggzikxe9grdFRq2E9vAecddE=
+github.com/lawzava/emailscraper v1.3.1/go.mod h1:FCuK3oxZQxUjU0jRYkG4r62TnO6MT5ZsiVoOTmpvBqI=
 github.com/lawzava/go-tld v1.1.0 h1:fjtGrvEjsumnm+beoocW71RPl6OQfQr6R5wESvP2kow=
 github.com/lawzava/go-tld v1.1.0/go.mod h1:/mIjyMjSDHCsk9bFH8Dg5Yq0+pysx1m46RnqjGqBxwI=
 github.com/ledongthuc/pdf v0.0.0-20220302134840-0c2507a12d80 h1:6Yzfa6GP0rIo/kULo2bwGEkFvCePZ3qHDDTC3/J9Swo=
