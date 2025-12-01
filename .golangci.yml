@@ -1,36 +1,51 @@
-linters-settings:
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-  goimports:
-    local-prefixes: github.com/lawzava/scrape
-  govet:
-    check-shadowing: true
-  funlen:
-    lines: 100
-  misspell:
-    locale: US
-  nakedret:
-    max-func-lines: 2
-  gofumpt:
-    extra-rules: true
-
+version: "2"
 linters:
-  enable-all: true
+  default: all
   disable:
     - depguard
-
-issues:
-  exclude-rules:
-    - path: examples/*
-      linters:
-        - gomnd
-        - exhaustivestruct
-        - gochecknoglobals
-    - path: _test\.go
-      linters:
-        - exhaustivestruct
+    - wsl
+  settings:
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - experimental
+        - opinionated
+        - performance
+        - style
+    misspell:
+      locale: US
+    nakedret:
+      max-func-lines: 2
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  settings:
+    gofumpt:
+      extra-rules: true
+    goimports:
+      local-prefixes:
+        - github.com/lawzava/emailscraper
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

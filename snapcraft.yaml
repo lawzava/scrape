@@ -1,12 +1,12 @@
 name: scrape
-version: '1.9.1'
+version: '1.10.0'
 summary: CLI utility to scrape emails from websites
 description: |
   CLI utility that scrapes emails from specified website recursively and concurrently
 
   Sample call: `scrape -w lawzava.com`
 confinement: strict
-base: core22
+base: core24
 type: app
 grade: stable
 icon: ./icon.svg
