@@ -3,7 +3,6 @@ linters:
   default: all
   disable:
     - depguard
-    - goimport
     - wsl
   settings:
     wsl_v5:
