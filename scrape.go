@@ -7,12 +7,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//nolint:exhaustivestruct,gochecknoglobals,exhaustruct // not valid requirement for this use case
+//nolint:gochecknoglobals,exhaustruct // not valid requirement for this use case
 var rootCmd = &cobra.Command{
 	Use:   "scrape",
 	Short: "CLI utility to scrape emails from websites",
 	Long:  `CLI utility that scrapes emails from specified website recursively and concurrently`,
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, _ []string) {
 		scraper := emailscraper.New(scraperParameters)
 
 		// Scrape for emails

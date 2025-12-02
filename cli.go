@@ -19,7 +19,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Recursively,
 		"recursively", true, "Scrape website recursively")
 	rootCmd.PersistentFlags().IntVarP(&scraperParameters.MaxDepth,
-		"depth", "d", 3, "Max depth to follow when scraping recursively") //nolint:gomnd // allow default max depth
+		"depth", "d", 3, "Max depth to follow when scraping recursively") //nolint:mnd // allow default max depth
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Async,
 		"async", true, "Scrape website pages asynchronously")
 	rootCmd.PersistentFlags().BoolVar(&scraperParameters.Debug,
