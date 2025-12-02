@@ -12,15 +12,12 @@ grade: stable
 icon: ./icon.svg
 parts:
   scrape:
-    plugin: nil
-    build-snaps: [go]
+    plugin: go
     source: .
-    source-type: git
-    override-build: |
-      export GOBIN=$SNAPCRAFT_PART_INSTALL/bin
-      export GO111MODULE=on
-      export CGO_ENABLED=0
-      go build -o ../../../prime/bin/scrape
+    build-snaps:
+      - go/latest/stable
+    build-environment:
+      - CGO_ENABLED: "0"
 apps:
   scrape:
     command: bin/scrape
