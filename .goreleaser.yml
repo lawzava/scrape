@@ -46,4 +46,12 @@ brews:
       email: git@lawzava.com
     repository:
       owner: lawzava
-      name: scrape
+      name: scrape      # main requires a pull request, so the formula update lands on its own
+      # branch and goreleaser opens a PR instead of pushing to main.
+      branch: 'formula/scrape-{{ .Version }}'
+      pull_request:
+        enabled: true
+        base:
+          owner: lawzava
+          name: scrape
+          branch: main
