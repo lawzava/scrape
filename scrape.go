@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//nolint:gochecknoglobals,exhaustruct // not valid requirement for this use case
+//nolint:gochecknoglobals,exhaustruct,exhaustruct_v5 // not valid requirement for this use case
 var rootCmd = &cobra.Command{
 	Use:   "scrape",
 	Short: "CLI utility to scrape emails from websites",
