@@ -1,6 +1,7 @@
 name: scrape
 version: '1.10.0'
 summary: CLI utility to scrape emails from websites
+license: MIT
 description: |
   CLI utility that scrapes emails from specified website recursively and concurrently
 
