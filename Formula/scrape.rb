@@ -5,20 +5,20 @@
 class Scrape < Formula
   desc "CLI utility to scrape emails from websites"
   homepage "https://github.com/lawzava/scrape"
-  version "1.10.1"
+  version "1.10.2"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/lawzava/scrape/releases/download/v1.10.1/scrape_darwin_amd64.tar.gz"
-      sha256 "87c4119d35be8c11f7a1d786cbf36342fec060934587e05b0362d704c9af2c7c"
+      url "https://github.com/lawzava/scrape/releases/download/v1.10.2/scrape_darwin_amd64.tar.gz"
+      sha256 "fcfb3bc6219b1793a152cdab36935e7c1b6e78bd29a8a713ea13aaa2c4264bb8"
 
       define_method(:install) do
         bin.install "scrape"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/lawzava/scrape/releases/download/v1.10.1/scrape_darwin_arm64.tar.gz"
-      sha256 "aef80c66f2bb1322c5b8228878c4cd9cffecadd0b31ec3b26517396059fa1c9c"
+      url "https://github.com/lawzava/scrape/releases/download/v1.10.2/scrape_darwin_arm64.tar.gz"
+      sha256 "ecfd32ee01b5407f4b08057a53bd979059b66b67d8dc2e48aa08e09a7db52b2a"
 
       define_method(:install) do
         bin.install "scrape"
@@ -28,22 +28,22 @@ class Scrape < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/lawzava/scrape/releases/download/v1.10.1/scrape_linux_amd64.tar.gz"
-      sha256 "58f73dc0563de65d5ffbcb649f28a516c2eab5a7012b2f40816fddc3c6b50d19"
+      url "https://github.com/lawzava/scrape/releases/download/v1.10.2/scrape_linux_amd64.tar.gz"
+      sha256 "e334264a2d2b335b807a6c5680bd31725b63ca87e6491e268c8b81c3ff3943c5"
       define_method(:install) do
         bin.install "scrape"
       end
     end
     if Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-      url "https://github.com/lawzava/scrape/releases/download/v1.10.1/scrape_linux_armv6.tar.gz"
-      sha256 "b0ad5fc23fdfe8926be822d7f8e3241b93c043fbec89b0e695cfb1d08305bc21"
+      url "https://github.com/lawzava/scrape/releases/download/v1.10.2/scrape_linux_armv6.tar.gz"
+      sha256 "7d29d0c09f4abd1899aaf0782a6055e6e562df5774e5867fe497ee041022510c"
       define_method(:install) do
         bin.install "scrape"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/lawzava/scrape/releases/download/v1.10.1/scrape_linux_arm64.tar.gz"
-      sha256 "3c475e7b01410b8fca5600a3b925fb5177f66637fa2ea0eafcaaded36ead56ca"
+      url "https://github.com/lawzava/scrape/releases/download/v1.10.2/scrape_linux_arm64.tar.gz"
+      sha256 "9f7c67c0382d35322bd41a1bbcd9eb506f32bfde0840ceebce16e83197e27feb"
       define_method(:install) do
         bin.install "scrape"
       end
